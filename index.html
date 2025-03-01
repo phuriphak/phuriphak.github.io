@@ -19,7 +19,8 @@
             const referralCode = userId.substring(userId.length - 6); // ใช้ 6 ตัวท้ายของ userId เป็น referral code
 
             // สร้าง URL สำหรับแอดเพื่อน LINE OA
-            const referralLink = `https://line.me/R/ti/p/%40@603ihumd?ref=${referralCode}`;
+            const referralLink = `https://line.me/R/ti/p/603ihumd?ref=${referralCode}`;
+            
 
             // แสดง Referral Link ให้ผู้ใช้
             document.getElementById("referralLink").innerHTML = `<a href="${referralLink}" target="_blank">${referralLink}</a>`;
