@@ -17,7 +17,7 @@
             const profile = await liff.getProfile();
             const userId = profile.userId;
             const referralCode = userId.substring(userId.length - 6); // ใช้ 6 ตัวท้ายเป็นโค้ดแนะนำ
-            const referralLink = `https://liff.line.me/YOUR_LIFF_ID?ref=${referralCode}`;
+            const referralLink = `https://liff.line.me/2006986037-JozP7wKE?ref=${referralCode}`;
 
             document.getElementById("referralLink").innerHTML = `<a href="${referralLink}" target="_blank">${referralLink}</a>`;
         }
