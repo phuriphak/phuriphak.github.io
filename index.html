@@ -1,31 +1,29 @@
-<button id="generate-link">สร้างลิงก์เชิญเพื่อน</button>
-<div id="qrcode"></div>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แนะนำเพื่อน LINE OA</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+    <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA</h2>
+    <button onclick="generateReferralLink()">สร้างลิงก์แนะนำ</button>
+    <p id="referralLink"></p>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/+esm"></script>
-<script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+    <script>
+        async function generateReferralLink() {
+            await liff.init({ liffId: "2006986037-JozP7wKE" }); // แทนที่ YOUR_LIFF_ID ด้วย LIFF ID ของคุณ
+            const profile = await liff.getProfile();
+            const userId = profile.userId; // ใช้ userId หรือกำหนดรหัส referral code ของคุณ
+            const referralCode = userId.substring(userId.length - 6); // ใช้ 6 ตัวท้ายของ userId เป็น referral code
 
-    const supabase = createClient('https://qddlkalznhlyuhpxlxxc.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkZGxrYWx6bmhseXVocHhseHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4ODU3NjksImV4cCI6MjA1NjQ2MTc2OX0.MN7POFGN967nOr616tRI5l3Z1kXSsXOY5HwegUfZ7eE');
+            // สร้าง URL สำหรับแอดเพื่อน LINE OA
+            const referralLink = `https://line.me/R/ti/p/@603ihumd?ref=${referralCode}`;
 
-    // ฟังก์ชันสร้าง Referral Code
-    function generateReferralCode() {
-        return Math.random().toString(36).substr(2, 8).toUpperCase();
-    }
-
-    document.getElementById("generate-link").addEventListener("click", async () => {
-        const referralCode = generateReferralCode();
-        
-        // สร้าง Referral Link
-        const inviteLink = `https://line.me/R/ti/p/@603ihumd?ref=${referralCode}`
-;
-        
-        // บันทึก Referral Code ลงใน Supabase
-        await supabase.from('referrals').insert([{ referral_code: referralCode }]);
-        
-        // แสดงลิงก์และสร้าง QR Code
-        document.getElementById('qrcode').innerHTML = '';
-        QRCode.toCanvas(inviteLink, { width: 200 }, (err, canvas) => {
-            if (!err) document.getElementById('qrcode').appendChild(canvas);
-        });
-    });
-</script>
+            // แสดง Referral Link ให้ผู้ใช้
+            document.getElementById("referralLink").innerHTML = `<a href="${referralLink}" target="_blank">${referralLink}</a>`;
+        }
+    </script>
+</body>
+</html>
