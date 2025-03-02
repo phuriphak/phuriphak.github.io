@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แนะนำเพื่อน LINE OA 20250302</title>
+    <title>แนะนำเพื่อน LINE OA</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/+esm"></script> <!-- ใช้ QRCode.js จาก CDN -->
 </head>
 <body>
-    <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA</h2>
+    <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA 20250302</h2>
     <button onclick="generateReferralLink()">สร้างลิงก์แนะนำ</button>
     <p id="referralLink"></p>
-    <div id="qrcode"></div> <!-- ที่จะแสดง QR Code -->
+    <img id="qrImage" style="display: none; width: 200px; height: 200px;" alt="QR Code">
 
     <script>
         async function generateReferralLink() {
-            await liff.init({ liffId: "2006986037-JozP7wKE" }); // แทนที่ YOUR_LIFF_ID ด้วย LIFF ID ของคุณ
+            await liff.init({ liffId: "2006986037-JozP7wKE" }); // แทนที่ด้วย LIFF ID ของคุณ
             const profile = await liff.getProfile();
-            const userId = profile.userId; // ใช้ userId หรือกำหนดรหัส referral code ของคุณ
+            const userId = profile.userId; 
             const referralCode = userId.substring(userId.length - 6); // ใช้ 6 ตัวท้ายของ userId เป็น referral code
 
             // สร้าง URL สำหรับแอดเพื่อน LINE OA
@@ -26,20 +25,10 @@
             // แสดง Referral Link ให้ผู้ใช้
             document.getElementById("referralLink").innerHTML = `<a href="${referralLink}" target="_blank">${referralLink}</a>`;
 
-            // เคลียร์ QR Code เก่า
-            document.getElementById('qrcode').innerHTML = '';
-
-            // ใช้ QRCode.toDataURL() แทน QRCode.toCanvas()
-            QRCode.toDataURL(referralLink, { width: 200 }, function(error, url) {
-                if (error) {
-                    console.error('QR Code Error:', error); // เพิ่มการแสดง error หากเกิดปัญหา
-                } else {
-                    // สร้าง <img> tag แสดง QR Code จาก Data URL ที่ได้รับ
-                    const qrImage = document.createElement('img');
-                    qrImage.src = url;
-                    document.getElementById('qrcode').appendChild(qrImage); // เพิ่มแสดง QR Code ที่ div#qrcode
-                }
-            });
+            // ใช้ Google Chart API สร้าง QR Code
+            const qrImage = document.getElementById("qrImage");
+            qrImage.src = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(referralLink)}`;
+            qrImage.style.display = "block"; // แสดง QR Code
         }
     </script>
 </body>
