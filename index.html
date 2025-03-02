@@ -1,50 +1,49 @@
-<button id="generate-link">📨 แชร์ลิงก์เชิญเพื่อน</button>
-<p id="invite-link"></p>
-<div id="qrcode"></div>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+    const liffId = '2006986037-JozP7wKE';
 
-<script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-    import QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.1/+esm";
-
-    // ตั้งค่า Supabase
-    const supabaseUrl = "https://qddlkalznhlyuhpxlxxc.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkZGxrYWx6bmhseXVocHhseHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4ODU3NjksImV4cCI6MjA1NjQ2MTc2OX0.MN7POFGN967nOr616tRI5l3Z1kXSsXOY5HwegUfZ7eE";
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    // ตั้งค่า LIFF
-    const liffId = "2006986037-JozP7wKE";
-
-    document.getElementById("generate-link").addEventListener("click", async () => {
-        const liff = await import("https://static.line-scdn.net/liff/edge/2/sdk.js");
-        await liff.default.init({ liffId });
-
-        if (!liff.default.isLoggedIn()) {
-            liff.default.login();
-            return;
-        }
-
-        const profile = await liff.default.getProfile();
-        const userId = profile.userId;
-
-        // สร้าง Referral Code
-        const referralCode = generateReferralCode();
-
-        // บันทึกลง Supabase
-        await supabase.from("referrals").insert([{ user_id: userId, referral_code: referralCode }]);
-
-        // สร้าง LIFF URL + Referral Code
-        const inviteLink = `https://line.me/R/ti/p/@603ihumd?ref=${referralCode}`;
-        document.getElementById("invite-link").innerText = inviteLink;
-
-        // สร้าง QR Code
-        document.getElementById("qrcode").innerHTML = "";
-        QRCode.toCanvas(inviteLink, { width: 200 }, (err, canvas) => {
-            if (!err) document.getElementById("qrcode").appendChild(canvas);
+    // ตรวจสอบการเชื่อมต่อและการ login
+    function initLiff() {
+        liff.init({ liffId }).then(() => {
+            if (liff.isLoggedIn()) {
+                getProfile();
+            } else {
+                liff.login(); // ถ้ายังไม่ได้ login จะให้ login
+            }
+        }).catch(err => {
+            console.error('LIFF initialization error:', err);
         });
-    });
+    }
+
+    // ดึงข้อมูลโปรไฟล์ของผู้ใช้
+    function getProfile() {
+        liff.getProfile().then(profile => {
+            const userId = profile.userId;
+            console.log('User Profile:', profile);
+
+            // สร้าง Referral Link
+            const referralCode = generateReferralCode();
+            const referralLink = `https://line.me/R/ti/p/@603ihumd?ref=${referralCode}`;
+            console.log('Referral Link:', referralLink);
+
+            // สร้าง QR Code (ใช้ QRCode.js)
+            QRCode.toCanvas(referralLink, { width: 200 }, (err, canvas) => {
+                if (!err) {
+                    document.getElementById('qrcode').appendChild(canvas);
+                }
+            });
+
+            // บันทึกข้อมูลใน Supabase หรือทำสิ่งที่ต้องการ
+        }).catch(error => {
+            console.error('Error fetching profile:', error);
+        });
+    }
 
     // ฟังก์ชันสร้าง Referral Code
     function generateReferralCode() {
         return Math.random().toString(36).substr(2, 8).toUpperCase();
     }
+
+    // เรียกฟังก์ชันเริ่มต้น
+    initLiff();
 </script>
