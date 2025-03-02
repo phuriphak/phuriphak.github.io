@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แนะนำเพื่อน LINE OA</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/+esm"></script> <!-- เพิ่ม QRCode.js -->
 </head>
 <body>
     <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA</h2>
     <button onclick="generateReferralLink()">สร้างลิงก์แนะนำ</button>
     <p id="referralLink"></p>
+    <div id="qrcode"></div> <!-- ที่จะแสดง QR Code -->
 
     <script>
         async function generateReferralLink() {
@@ -23,6 +25,13 @@
 
             // แสดง Referral Link ให้ผู้ใช้
             document.getElementById("referralLink").innerHTML = `<a href="${referralLink}" target="_blank">${referralLink}</a>`;
+
+            // สร้าง QR Code จาก referral link
+            document.getElementById('qrcode').innerHTML = ''; // เคลียร์ QR Code เก่า
+            QRCode.toCanvas(referralLink, { width: 200 }, (err, canvas) => {
+                if (err) console.error(err);
+                else document.getElementById('qrcode').appendChild(canvas); // แสดง QR Code ใน <div> ที่กำหนด
+            });
         }
     </script>
 </body>
