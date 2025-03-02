@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แนะนำเพื่อน LINE OA 3</title>
+    <title>แนะนำเพื่อน LINE OA</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         body {
@@ -16,7 +16,7 @@
             padding: 15px;
             width: 80%;
             max-width: 300px;
-            margin: 10px;
+            margin: 10px auto;
             border: none;
             border-radius: 10px;
             cursor: pointer;
@@ -30,15 +30,22 @@
             color: white;
             display: none;
         }
+        #qrContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
         #qrImage {
-            margin-top: 15px;
             width: 200px;
             height: 200px;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA</h2>
+    <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA 3</h2>
     <button id="generateButton" onclick="generateReferralLink()">สร้างลิงก์แนะนำ</button>
 
     <h3>ข้อมูลผู้ใช้</h3>
@@ -48,10 +55,11 @@
 
     <h3>ลิงก์แนะนำเพื่อน</h3>
     <p id="referralLink">-</p>
-    <button id="copyButton" onclick="copyReferralLink()">คัดลอกลิงก์</button>
 
-    <h3>QR Code</h3>
-    <img id="qrImage" style="display: none;" alt="QR Code">
+    <div id="qrContainer">
+        <button id="copyButton" onclick="copyReferralLink()">คัดลอกลิงก์</button>
+        <img id="qrImage" alt="QR Code">
+    </div>
 
     <script>
         async function generateReferralLink() {
