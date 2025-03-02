@@ -26,11 +26,17 @@
             // แสดง Referral Link ให้ผู้ใช้
             document.getElementById("referralLink").innerHTML = `<a href="${referralLink}" target="_blank">${referralLink}</a>`;
 
+            // เคลียร์ QR Code เก่า
+            document.getElementById('qrcode').innerHTML = '';
+
             // สร้าง QR Code จาก referral link
-            document.getElementById('qrcode').innerHTML = ''; // เคลียร์ QR Code เก่า
-            QRCode.toCanvas(referralLink, { width: 200 }, (err, canvas) => {
-                if (err) console.error(err);
-                else document.getElementById('qrcode').appendChild(canvas); // แสดง QR Code ใน <div> ที่กำหนด
+            QRCode.toCanvas(referralLink, { width: 200 }, function(error, canvas) {
+                if (error) {
+                    console.error(error);
+                } else {
+                    // เพิ่ม canvas ที่สร้างจาก QR Code ลงใน div
+                    document.getElementById('qrcode').appendChild(canvas);
+                }
             });
         }
     </script>
