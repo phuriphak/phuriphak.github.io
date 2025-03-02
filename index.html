@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แนะนำเพื่อน LINE OA</title>
+    <title>แนะนำเพื่อน LINE OA 20250302</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/+esm"></script> <!-- เพิ่ม QRCode.js -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/+esm"></script> <!-- ใช้ QRCode.js จาก CDN -->
 </head>
 <body>
     <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA</h2>
@@ -29,13 +29,15 @@
             // เคลียร์ QR Code เก่า
             document.getElementById('qrcode').innerHTML = '';
 
-            // สร้าง QR Code จาก referral link
-            QRCode.toCanvas(referralLink, { width: 200 }, function(error, canvas) {
+            // ใช้ QRCode.toDataURL() แทน QRCode.toCanvas()
+            QRCode.toDataURL(referralLink, { width: 200 }, function(error, url) {
                 if (error) {
-                    console.error(error);
+                    console.error('QR Code Error:', error); // เพิ่มการแสดง error หากเกิดปัญหา
                 } else {
-                    // เพิ่ม canvas ที่สร้างจาก QR Code ลงใน div
-                    document.getElementById('qrcode').appendChild(canvas);
+                    // สร้าง <img> tag แสดง QR Code จาก Data URL ที่ได้รับ
+                    const qrImage = document.createElement('img');
+                    qrImage.src = url;
+                    document.getElementById('qrcode').appendChild(qrImage); // เพิ่มแสดง QR Code ที่ div#qrcode
                 }
             });
         }
