@@ -7,7 +7,7 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-    <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA 20250302</h2>
+    <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA 2</h2>
     <button onclick="generateReferralLink()">สร้างลิงก์แนะนำ</button>
     <p id="referralLink"></p>
     <img id="qrImage" style="display: none; width: 200px; height: 200px;" alt="QR Code">
@@ -17,18 +17,18 @@
             await liff.init({ liffId: "2006986037-JozP7wKE" }); // แทนที่ด้วย LIFF ID ของคุณ
             const profile = await liff.getProfile();
             const userId = profile.userId; 
-            const referralCode = userId.substring(userId.length - 6); // ใช้ 6 ตัวท้ายของ userId เป็น referral code
+            const referralCode = userId.substring(userId.length - 6); 
 
             // สร้าง URL สำหรับแอดเพื่อน LINE OA
             const referralLink = `https://line.me/R/ti/p/@603ihumd?ref=${referralCode}`;
 
-            // แสดง Referral Link ให้ผู้ใช้
+            // แสดง Referral Link
             document.getElementById("referralLink").innerHTML = `<a href="${referralLink}" target="_blank">${referralLink}</a>`;
 
-            // ใช้ Google Chart API สร้าง QR Code
+            // ใช้ QuickChart API สร้าง QR Code
             const qrImage = document.getElementById("qrImage");
-            qrImage.src = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(referralLink)}`;
-            qrImage.style.display = "block"; // แสดง QR Code
+            qrImage.src = `https://quickchart.io/qr?text=${encodeURIComponent(referralLink)}&size=200`;
+            qrImage.style.display = "block"; 
         }
     </script>
 </body>
