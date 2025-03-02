@@ -3,32 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แนะนำเพื่อน LINE OA</title>
+    <title>แนะนำเพื่อน LINE OA 3</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        button {
+            font-size: 20px;
+            padding: 15px;
+            width: 80%;
+            max-width: 300px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #generateButton {
+            background-color: #06C755;
+            color: white;
+        }
+        #copyButton {
+            background-color: #007BFF;
+            color: white;
+            display: none;
+        }
+        #qrImage {
+            margin-top: 15px;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
-    <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA 2</h2>
-    <button onclick="generateReferralLink()">สร้างลิงก์แนะนำ</button>
-    <p id="referralLink"></p>
-    <img id="qrImage" style="display: none; width: 200px; height: 200px;" alt="QR Code">
+    <h2>แชร์ลิงก์แนะนำเพื่อน LINE OA</h2>
+    <button id="generateButton" onclick="generateReferralLink()">สร้างลิงก์แนะนำ</button>
+
+    <h3>ข้อมูลผู้ใช้</h3>
+    <p><strong>ชื่อ:</strong> <span id="displayName">-</span></p>
+    <p><strong>LINE User ID:</strong> <span id="userId">-</span></p>
+    <p><strong>รหัสแนะนำเพื่อน:</strong> <span id="referralCode">-</span></p>
+
+    <h3>ลิงก์แนะนำเพื่อน</h3>
+    <p id="referralLink">-</p>
+    <button id="copyButton" onclick="copyReferralLink()">คัดลอกลิงก์</button>
+
+    <h3>QR Code</h3>
+    <img id="qrImage" style="display: none;" alt="QR Code">
 
     <script>
         async function generateReferralLink() {
             await liff.init({ liffId: "2006986037-JozP7wKE" }); // แทนที่ด้วย LIFF ID ของคุณ
             const profile = await liff.getProfile();
-            const userId = profile.userId; 
-            const referralCode = userId.substring(userId.length - 6); 
+            const userId = profile.userId;
+            const displayName = profile.displayName;
+            const referralCode = userId.substring(userId.length - 6);
 
             // สร้าง URL สำหรับแอดเพื่อน LINE OA
             const referralLink = `https://line.me/R/ti/p/@603ihumd?ref=${referralCode}`;
 
+            // อัปเดตข้อมูลผู้ใช้
+            document.getElementById("displayName").textContent = displayName;
+            document.getElementById("userId").textContent = userId;
+            document.getElementById("referralCode").textContent = referralCode;
+
             // แสดง Referral Link
             document.getElementById("referralLink").innerHTML = `<a href="${referralLink}" target="_blank">${referralLink}</a>`;
+
+            // แสดงปุ่ม Copy
+            document.getElementById("copyButton").style.display = "block";
 
             // ใช้ QuickChart API สร้าง QR Code
             const qrImage = document.getElementById("qrImage");
             qrImage.src = `https://quickchart.io/qr?text=${encodeURIComponent(referralLink)}&size=200`;
-            qrImage.style.display = "block"; 
+            qrImage.style.display = "block";
+        }
+
+        function copyReferralLink() {
+            const referralLink = document.getElementById("referralLink").textContent;
+            navigator.clipboard.writeText(referralLink).then(() => {
+                alert("คัดลอกลิงก์สำเร็จ!");
+            }).catch(err => {
+                console.error("ไม่สามารถคัดลอกลิงก์ได้: ", err);
+            });
         }
     </script>
 </body>
