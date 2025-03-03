@@ -70,8 +70,8 @@
             const referralCode = userId.substring(userId.length - 6);
 
             // สร้าง URL สำหรับแอดเพื่อน LINE OA
-            const referralLink = `https://line.me/R/ti/p/@603ihumd?ref=${referralCode}`;
-
+            //const referralLink = `https://line.me/R/ti/p/@603ihumd?ref=${referralCode}`;
+            const referralLink = `https://line.me/R/oaMessage/@603ihumd/?${referralCode}`;
             // อัปเดตข้อมูลผู้ใช้
             document.getElementById("displayName").textContent = displayName;
             document.getElementById("userId").textContent = userId;
